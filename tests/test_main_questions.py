@@ -1,7 +1,7 @@
 import allure
 import pytest
 from data import QAInfo
-from pages.base_page import BasePage
+from pages.main_page import MainPage
 from locators.qa_page_locators import QAPageLocators
 
 
@@ -21,10 +21,9 @@ class TestMainQuestions:
                              ],
                              )
     def test_check_answers(self, wd, quest, answ, answers):
-        qa_page = BasePage(wd)
+        qa_page = MainPage(wd)
         qa_page.open_base_url()
         qa_page.click_cookies_yes_button()
-        qa_page.test_scroll_to_bottom_with_dynamic_loading(wd)
         qa_page.click_dropdown_menu_button(quest)
         qa_page.wait_until_element_is_visible(answ)
         assert qa_page.find_page(answ).text == answers

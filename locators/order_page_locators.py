@@ -2,7 +2,10 @@ from selenium.webdriver.common.by import By
 
 
 class OrderScooterLocators:
-    header_ord_frm = [By.CLASS_NAME, 'Order_Header__BZXOb']  # Заголовок "Для кого самокат"
+    order_btn_top = (By.XPATH, '(//button[text()="Заказать"])[1]')  # Кнопка "Заказать" сверху страницы
+    order_btn_bottom = (By.XPATH, '(//button[text()="Заказать"])[2]')  # Кнопка "Заказать" снизу страницы
+    header_ord_frm = (By.CLASS_NAME, 'Order_Header__BZXOb')  # Заголовок "Для кого самокат"
+    header_ord_frm_2 = (By.XPATH, '//div[text()="Про аренду"]')  # Заголовок "Про аренду"
     header_booking_button = (By.XPATH, './/button[@class="Button_Button__ra12g" and text() = "Заказать"]')
     first_name = (By.XPATH, './/input[@placeholder="* Имя"]')  # Имя
     surname = (By.XPATH, './/input[@placeholder="* Фамилия"]')  # Фамилия
@@ -27,3 +30,4 @@ class OrderScooterLocators:
         By.XPATH,
         './/button[@class="Button_Button__ra12g Button_Middle__1CSJM" and text() = "Посмотреть статус"]'
     )  # Посмотреть статус
+    next_button = (By.XPATH, './/button[text() = "Далее"]')  # Кнопка "Далее"
