@@ -2,6 +2,7 @@ import allure
 import pytest
 from data import URL, UserInfo
 from pages.order_scooter_page import OrderPage
+from pages.main_page import MainPage
 
 
 class TestOrderScooter:
@@ -11,7 +12,8 @@ class TestOrderScooter:
     def test_click_ordering_header(self, wd):
         order_page = OrderPage(wd)
         order_page.open_base_url()
-        order_page.click_cookies_yes_button()
+        main_page = MainPage(wd)
+        main_page.click_cookies_yes_button()
         order_page.click_order_top_button()
         order_page.wait_until_next_button_is_clickable()
         assert order_page.show_current_url() == URL.ORDER_PAGE
@@ -21,10 +23,11 @@ class TestOrderScooter:
     def test_click_ordering_footer(self, wd):
         order_page = OrderPage(wd)
         order_page.open_base_url()
-        order_page.click_cookies_yes_button()
-        order_page.scroll_to_bottom_with_dynamic_loading(wd)
+        main_page = MainPage(wd)
+        main_page.click_cookies_yes_button()
+        main_page.scroll_to_bottom_with_dynamic_loading()
+        order_page.wait_until_order_btn_bottom_is_visible()
         order_page.click_order_bottom_button()
-        order_page.wait_until_next_button_is_clickable()
         assert order_page.show_current_url() == URL.ORDER_PAGE
 
     @allure.title("Заполнение формы оформления заказа (positive case)")
@@ -45,7 +48,8 @@ class TestOrderScooter:
     def test_ordering_form(self, wd, first_name, surname, address, subway_station, mobile_number, comment):
         order_page = OrderPage(wd)
         order_page.open_base_url()
-        order_page.click_cookies_yes_button()
+        main_page = MainPage(wd)
+        main_page.click_cookies_yes_button()
         order_page.click_order_top_button()
         order_page.fill_order_form(first_name, surname, address, subway_station, mobile_number)
         order_page.wait_until_order_second_form_is_visible()
@@ -55,11 +59,9 @@ class TestOrderScooter:
     @allure.title("Нажать на логотип «Самоката»")
     @allure.description("Проверка, если нажать на логотип «Самоката», попадёшь на главную страницу «Самоката»")
     def test_redirect_scooter(self, wd):
-        redirect_page = OrderPage(wd)
-        redirect_page.open_base_url()
-        redirect_page.click_order_top_button()
+        redirect_page = MainPage(wd)
+        redirect_page.open_order_url()
         redirect_page.click_scooter_button()
-        redirect_page.wait_until_order_btn_bottom_is_visible()
         assert redirect_page.show_current_url() == URL.BASE_PAGE
 
     @allure.title("Нажать на логотип Яндекса")
@@ -70,7 +72,8 @@ class TestOrderScooter:
         redirect_page.open_base_url()
         redirect_page.click_order_top_button()
         assert len(wd.window_handles) == 1
-        redirect_page.click_yandex_logo()
-        redirect_page.switch_window()
-        redirect_page.wait_until_dzen_is_visible()
+        main_page = MainPage(wd)
+        main_page.click_yandex_logo()
+        main_page.switch_window()
+        main_page.wait_until_dzen_is_visible()
         assert redirect_page.show_current_url() == URL.DZEN_PAGE

@@ -1,27 +1,17 @@
 import allure
-from pages.main_page import MainPage
+from pages.base_page import BasePage
 from locators.order_page_locators import OrderScooterLocators
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions
 
 
-class OrderPage(MainPage):
-
-    def __init__(self, wd):
-        super().__init__(wd)
-        self.wd = wd
+class OrderPage(BasePage):
 
     @allure.step("Дождаться, чтобы на элемент Далее можно было нажать")
     def wait_until_next_button_is_clickable(self):
-        return WebDriverWait(self.wd, 5).until(
-            expected_conditions.element_to_be_clickable(OrderScooterLocators.next_button)
-        )
+        self.wait_until_button_is_clickable(OrderScooterLocators.next_button)
 
     @allure.step("Дождаться загрузки кнопки заказать внизу страницы")
     def wait_until_order_btn_bottom_is_visible(self):
-        return WebDriverWait(self.wd, 5).until(
-            expected_conditions.presence_of_element_located(OrderScooterLocators.order_btn_bottom)
-        )
+        self.wait_until_button_is_clickable(OrderScooterLocators.order_btn_bottom)
 
     @allure.step("Кликаем кнопку 'Заказать' в хэдере")
     def click_order_top_button(self):
@@ -33,9 +23,7 @@ class OrderPage(MainPage):
 
     @allure.step("Дождаться загрузки второй формы оформления заказа")
     def wait_until_order_second_form_is_visible(self):
-        return WebDriverWait(self.wd, 5).until(
-            expected_conditions.presence_of_element_located(OrderScooterLocators.header_ord_frm_2)
-        )
+        self.wait_until_element_is_visible(OrderScooterLocators.header_ord_frm_2)
 
     @allure.step('Заполнение полей «Для кого самокат»')
     def fill_order_form(self, first_name, surname, address, subway_station, mobile_number):

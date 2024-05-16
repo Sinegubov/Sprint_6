@@ -11,7 +11,11 @@ class BasePage:
 
     @allure.step("Открыть базовую страницу")
     def open_base_url(self):
-        return self.wd.get(URL.BASE_PAGE)
+        self.wd.get(URL.BASE_PAGE)
+
+    @allure.step("Открыть страницу заказа самоката")
+    def open_order_url(self):
+        self.wd.get(URL.ORDER_PAGE)
 
     @allure.step("Вернуть адрес текущей страницы")
     def show_current_url(self):
@@ -27,9 +31,11 @@ class BasePage:
 
     @allure.step("Дождаться загрузки элемента")
     def wait_until_element_is_visible(self, locator):
-        return WebDriverWait(self.wd, 5).until(
-            expected_conditions.presence_of_element_located(locator)
-        )
+        WebDriverWait(self.wd, 5).until(expected_conditions.presence_of_element_located(locator))
+
+    @allure.step("Дождаться доступности кнопки для клика")
+    def wait_until_button_is_clickable(self, locator):
+        WebDriverWait(self.wd, 5).until(expected_conditions.element_to_be_clickable(locator))
 
     @allure.step("Переключение на всплывающую вкладку")
     def switch_window(self):
@@ -38,3 +44,13 @@ class BasePage:
             if window_handle != original_window:
                 self.wd.switch_to.window(window_handle)
                 break
+
+    @allure.step("Метод для прокрутки страницы вниз")
+    def scroll_to_bottom_with_dynamic_loading(self):
+        last_height = self.wd.execute_script("return document.body.scrollHeight")
+        while True:
+            self.wd.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            new_height = self.wd.execute_script("return document.body.scrollHeight")
+            if new_height == last_height:
+                break
+            last_height = new_height
